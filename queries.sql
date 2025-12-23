@@ -1,31 +1,39 @@
 -- query 1
-select b.booking_id, u.name customer_name, v.name vehicle_name, b.start_date, b.end_date, b.status
-  from bookings b
-  inner join users u
-  on b.user_id = u.user_id
-  inner join vehicles v
-  on b.vehicle_id = v.vehicle_id;
+SELECT
+    b.booking_id,
+    u.name AS customer_name,
+    v.name AS vehicle_name,
+    b.start_date,
+    b.end_date,
+    b.status
+FROM bookings b
+INNER JOIN users u ON b.user_id = u.user_id
+INNER JOIN vehicles v ON b.vehicle_id = v.vehicle_id;
 
 
 -- query 2
-select * from vehicles v
-  where v.status != 'rented'
-  and not exists(
-  select 1
-  from bookings b
-  where b.vehicle_id = v.vehicle_id
+SELECT *
+FROM vehicles v
+WHERE v.status != 'rented'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM bookings b
+    WHERE b.vehicle_id = v.vehicle_id
   )
-  order by v;
+ORDER BY v.vehicle_id;
 
 
 -- query 3
-select * from vehicles
-where type = 'car' and status = 'available';
+SELECT *
+FROM vehicles
+WHERE type = 'car'
+  AND status = 'available';
 
 -- query 4
-select name as vehicle_name, count(*) as total_bookings
-  from bookings b
-  inner join vehicles v
-  on b.vehicle_id = v.vehicle_id
-  group by name
-  having count(*) > 2;
+SELECT
+    v.name AS vehicle_name,
+    COUNT(*) AS total_bookings
+FROM bookings b
+INNER JOIN vehicles v ON b.vehicle_id = v.vehicle_id
+GROUP BY v.name
+HAVING COUNT(*) > 2;
